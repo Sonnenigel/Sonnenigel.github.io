@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Категория — ТЕРРАТЕРМ</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <div id="topbar-placeholder"></div>
+
+  <div id="header-placeholder"></div>
+
+<div class="container breadcrumbs">
+  <a href="/">Главная</a><span>/</span><a href="index.html">Каталог</a><span>/</span><span id="breadcrumbCurrent">Категория</span>
+</div>
+
+<section class="cat-hero">
+  <div class="container cat-hero-grid">
+    <div>
+      <h1 id="catTitle">Котлы отопления</h1>
+      <p class="cat-lead" id="catLead"></p>
+      <div class="cat-hero-stats">
+        <div><div class="num">40<span class="plus">+</span></div><div class="lbl">моделей в наличии</div></div>
+        <div><div class="num">8</div><div class="lbl">брендов</div></div>
+        <div><div class="num">5 лет</div><div class="lbl">гарантия монтажа</div></div>
+      </div>
+    </div>
+    <div class="cat-hero-visual">
+      <div class="cat-hero-photo" data-placeholder="Фото: категория · 600×400">
+        <img src="/assets/img/catalog/hero-warehouse.jpg" alt="" loading="lazy" onerror="this.remove()">
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="quick-filters">
+  <div class="container">
+    <div class="quick-filters-grid" id="quickFilters" style="display:none"></div>
+  </div>
+</section>
+
+<section class="container catalog-layout">
+  <aside class="catalog-sidebar">
+    <div class="sidebar-title">Фильтры</div>
+    <div class="filter-group">
+      <label>Тип</label>
+      <select id="categorySelect"></select>
+    </div>
+    <div class="filter-group">
+      <label>Производитель</label>
+      <select id="brandSelect"></select>
+    </div>
+    <div class="filter-group">
+      <label>Мощность</label>
+      <select id="powerSelect"></select>
+    </div>
+    <button class="reset-filters" id="resetBtn">Сбросить фильтры</button>
+  </aside>
+
+  <main class="catalog-main">
+    <div class="search-bar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="text" id="searchInput" placeholder="Поиск по названию или модели...">
+    </div>
+
+    <div class="results-info" style="margin-bottom:20px;font-size:14px;color:var(--muted)">
+      Найдено товаров: <strong id="resultsCount">0</strong>
+    </div>
+
+    <div class="product-grid" id="productGrid"></div>
+
+    <div id="noResults" style="display:none;text-align:center;padding:60px 20px;color:var(--muted);font-size:15px;background:var(--white);border-radius:14px;border:1px dashed var(--line);margin-top:20px">
+      По вашему запросу ничего не найдено. Измените параметры поиска.
+    </div>
+  </main>
+</section>
+
+
+<script src="../assets/js/include.js"></script>
+<script src="../assets/js/data.js"></script>
+<script src="../assets/js/app.js"></script>
+<script>initCategoryPage();</script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Поиск по сайту — ТЕРРАТЕРМ</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+
+  <div id="topbar-placeholder"></div>
+  <div id="header-placeholder"></div>
+
+  <div class="container">
+    <nav class="breadcrumbs" aria-label="Хлебные крошки">
+      <a href="/index.html">Главная</a>
+      <span>/</span>
+      <span>Поиск по сайту</span>
+    </nav>
+  </div>
+
+  <section class="page-head">
+    <div class="container">
+      <h1>Поиск <span class="accent">по сайту</span></h1>
+      <p class="page-head__lead">Сквозной поиск по моделям оборудования, инженерным услугам, статьям блога и выполненным объектам.</p>
+
+      
+      <div style="display: flex; gap: 12px; max-width: 680px; margin-top: 24px; flex-wrap: wrap;">
+        <input type="search" id="siteSearchInput" placeholder="Введите модель котла, бренд или тему (например: Baxi, тёплый пол, 150)..." style="flex: 1; min-width: 260px; padding: 14px 18px; border-radius: 14px; border: 1px solid var(--line); background: #fff; font-size: 15px;">
+        <button type="button" id="siteSearchBtn" class="btn btn-primary">Найти →</button>
+      </div>
+    </div>
+  </section>
+
+  <main style="padding: 40px 0 80px;">
+    <div class="container">
+      
+      
+      <div class="blog-filters" id="searchTabs" style="margin-bottom: 24px;">
+        <button type="button" class="active" data-type="all">Все результаты (<span id="cntAll">0</span>)</button>
+        <button type="button" data-type="catalog">В каталоге (<span id="cntCatalog">0</span>)</button>
+        <button type="button" data-type="services">В услугах (<span id="cntServices">0</span>)</button>
+        <button type="button" data-type="blog">В блоге (<span id="cntBlog">0</span>)</button>
+        <button type="button" data-type="objects">В объектах (<span id="cntObjects">0</span>)</button>
+      </div>
+
+      
+      <div id="searchResults" style="display: flex; flex-direction: column; gap: 16px;"></div>
+
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  
+  <script src="/assets/js/include.js"></script>
+  <script src="/assets/js/data.js"></script>
+  <script src="/assets/js/services-data.js"></script>
+  <script src="/assets/js/blog-data.js"></script>
+  <script src="/assets/js/objects-data.js"></script>
+
+  <script>
+    const input = document.getElementById('siteSearchInput');
+    const resultsBox = document.getElementById('searchResults');
+    const tabs = document.getElementById('searchTabs');
+    let activeTab = 'all';
+
+    
+    function getAllSiteItems() {
+      const items = [];
+
+      (window.PRODUCTS || []).forEach(p => {
+        items.push({
+          type: 'catalog',
+          badge: 'Каталог · ' + (p.brand || ''),
+          title: p.name,
+          desc: (p.description || '').replace(/<[^>]*>/g, '').slice(0, 180) + '...',
+          url: '/catalog/product.html?slug=' + p.slug,
+          meta: p.price ? p.price.toLocaleString('ru-RU') + ' ₽' : ''
+        });
+      });
+
+      (window.SERVICES_LIST || []).forEach(s => {
+        items.push({
+          type: 'services',
+          badge: 'Услуга · ' + s.category,
+          title: s.title,
+          desc: s.shortDesc,
+          url: '/uslugi/service.html?slug=' + s.slug,
+          meta: s.price
+        });
+      });
+
+      (window.BLOG_POSTS || []).forEach(b => {
+        items.push({
+          type: 'blog',
+          badge: 'Блог · ' + b.category,
+          title: b.title,
+          desc: b.excerpt,
+          url: '/blog/article.html?slug=' + b.slug,
+          meta: b.date
+        });
+      });
+
+      (window.OBJECTS_LIST || []).forEach(o => {
+        items.push({
+          type: 'objects',
+          badge: 'Объект · ' + o.location,
+          title: o.title,
+          desc: o.excerpt,
+          url: '/obekty/case.html?slug=' + o.slug,
+          meta: o.totalPrice
+        });
+      });
+
+      return items;
+    }
+
+    function runSearch() {
+      const q = input.value.trim().toLowerCase();
+      const all = getAllSiteItems();
+
+      const matched = q
+        ? all.filter(item =>
+            item.title.toLowerCase().includes(q) ||
+            item.desc.toLowerCase().includes(q) ||
+            item.badge.toLowerCase().includes(q)
+          )
+        : all.slice(0, 8); 
+
+      
+      document.getElementById('cntAll').textContent = matched.length;
+      document.getElementById('cntCatalog').textContent = matched.filter(i => i.type === 'catalog').length;
+      document.getElementById('cntServices').textContent = matched.filter(i => i.type === 'services').length;
+      document.getElementById('cntBlog').textContent = matched.filter(i => i.type === 'blog').length;
+      document.getElementById('cntObjects').textContent = matched.filter(i => i.type === 'objects').length;
+
+      const filtered = activeTab === 'all' ? matched : matched.filter(i => i.type === activeTab);
+
+      if (!filtered.length) {
+        resultsBox.innerHTML = `
+          <div class="feature" style="text-align:center; padding:40px;">
+            <h3>По запросу «${input.value}» ничего не найдено</h3>
+            <p style="margin-top:8px;">Попробуйте изменить запрос или свяжитесь с инженером для подбора оборудования.</p>
+          </div>
+        `;
+        return;
+      }
+
+      resultsBox.innerHTML = filtered.map(item => `
+        <a href="${item.url}" class="feature" style="display:flex; justify-content:space-between; align-items:center; gap:20px; flex-wrap:wrap; transition:border-color .2s;">
+          <div style="flex:1; min-width:260px;">
+            <span class="section-tag" style="margin-bottom:8px;">${item.badge}</span>
+            <h3 style="margin-bottom:6px;">${item.title}</h3>
+            <p style="font-size:14px; color:var(--muted); margin:0;">${item.desc}</p>
+          </div>
+          <div style="text-align:right; flex-shrink:0;">
+            ${item.meta ? `<div style="font-weight:800; font-size:16px; color:var(--ink); margin-bottom:6px;">${item.meta}</div>` : ''}
+            <span style="font-size:13px; font-weight:600; color:var(--terra);">Перейти →</span>
+          </div>
+        </a>
+      `).join('');
+    }
+
+    
+    const urlQuery = new URLSearchParams(location.search).get('q');
+    if (urlQuery) input.value = urlQuery;
+
+    input.addEventListener('input', runSearch);
+    document.getElementById('siteSearchBtn').addEventListener('click', runSearch);
+
+    tabs.addEventListener('click', e => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      tabs.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeTab = btn.dataset.type;
+      runSearch();
+    });
+
+    runSearch();
+  </script>
+</body>
+</html>

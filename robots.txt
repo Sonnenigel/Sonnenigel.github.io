@@ -1,0 +1,24 @@
+User-agent: *
+Allow: /
+Allow: /assets/css/
+Allow: /assets/js/
+Allow: /assets/img/
+
+
+Disallow: /components/
+Disallow: /send.php
+Disallow: /404.html
+Disallow: /500.html
+Disallow: /search.html
+
+
+
+Disallow: /product.html$
+Disallow: /category.html$
+Disallow: /blog/article.html$
+Disallow: /obekty/case.html$
+Disallow: /uslugi/service.html$
+
+
+Host: https://terraterm.ru
+Sitemap: https://terraterm.ru/sitemap.xml

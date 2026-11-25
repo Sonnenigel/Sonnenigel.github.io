@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Статья — Блог ТЕРРАТЕРМ</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  
+  <div id="topbar-placeholder"></div>
+
+  
+  <div id="header-placeholder"></div>
+
+  
+  <div class="container">
+    <nav class="breadcrumbs" aria-label="Хлебные крошки">
+      <a href="../index.html">Главная</a>
+      <span>/</span>
+      <a href="../blog/index.html">Блог</a>
+      <span>/</span>
+      <span id="artBreadcrumb">Загрузка...</span>
+    </nav>
+  </div>
+
+  
+  <main class="product-page">
+    <div class="container" style="max-width: 860px;">
+      
+      <div style="display:flex; gap:12px; align-items:center; margin-bottom:16px; flex-wrap:wrap;">
+        <span class="section-tag" id="artCat" style="margin:0;"></span>
+        <span style="font-size:13px; color:var(--muted);" id="artDate"></span>
+      </div>
+
+      <h1 id="artTitle" style="margin-bottom:24px;"></h1>
+
+      
+      <div class="blog-author" style="margin-bottom:28px;">
+        <div class="blog-author__avatar" id="artAvatar"></div>
+        <div>
+          <div class="blog-author__name" id="artAuthorName"></div>
+          <div class="blog-author__role" id="artAuthorRole"></div>
+        </div>
+      </div>
+
+      
+      <div class="blog-photo" style="border-radius:var(--radius); margin-bottom:32px; border:1px solid var(--line);" data-placeholder="Фото статьи">
+        <img id="artImage" src="" alt="">
+      </div>
+
+      
+      <div class="desc-text" id="artContent" style="font-size:16px; line-height:1.75;"></div>
+
+      
+      <div class="cta-block" style="margin: 56px 0 0; padding: 40px 32px; border-radius: 24px;">
+        <h2>Нужен расчёт под ваш дом?</h2>
+        <p>Инженер бесплатно подберёт оборудование и подготовит смету по вашему плану дома.</p>
+        <a href="../kalkulyatory/index.html" class="btn">Рассчитать систему отопления →</a>
+      </div>
+
+    </div>
+  </main>
+
+  
+  <div id="footer-placeholder"></div>
+
+  <script src="../assets/js/include.js"></script>
+  <script src="../assets/js/blog-data.js"></script>
+  <script>
+    const slug = new URLSearchParams(location.search).get('slug');
+    const post = (window.BLOG_POSTS || []).find(p => p.slug === slug) || window.BLOG_POSTS[0];
+
+    if (post) {
+      document.title = post.title + ' — ТЕРРАТЕРМ';
+      document.getElementById('artBreadcrumb').textContent = post.title;
+      document.getElementById('artCat').textContent = post.category;
+      document.getElementById('artDate').textContent = post.date;
+      document.getElementById('artTitle').textContent = post.title;
+      document.getElementById('artAvatar').textContent = post.author.initials;
+      document.getElementById('artAuthorName').textContent = post.author.name;
+      document.getElementById('artAuthorRole').textContent = post.author.role;
+      document.getElementById('artContent').innerHTML = post.content;
+
+      const img = document.getElementById('artImage');
+      img.src = post.image.startsWith('/') ? '..' + post.image : post.image;
+
+      img.alt = post.title;
+    }
+  </script>
+</body>
+</html>

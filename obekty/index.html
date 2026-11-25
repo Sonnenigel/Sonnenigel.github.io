@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Выполненные объекты — ТЕРРАТЕРМ</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <div id="topbar-placeholder"></div>
+  <div id="header-placeholder"></div>
+
+  <div class="container">
+    <nav class="breadcrumbs" aria-label="Хлебные крошки">
+      <a href="../index.html">Главная</a>
+      <span>/</span>
+      <span>Объекты</span>
+    </nav>
+  </div>
+
+  
+  <section class="cat-hero">
+    <div class="container cat-hero-grid">
+      <div>
+        <h1>Реальные объекты <span class="accent">с бюджетом</span></h1>
+        <p class="cat-lead">С параметрами, оборудованием и финальной суммой — без стоковых фотографий. Каждый объект прошёл проектирование, монтаж и пусконаладку нашими инженерами.</p>
+        <div class="cat-hero-stats">
+          <div><span class="num">300<span class="plus">+</span></span><span class="lbl">Сданных объектов</span></div>
+          <div><span class="num">12<span class="plus">+</span></span><span class="lbl">Лет на рынке</span></div>
+          <div><span class="num">5 <span class="plus">лет</span></span><span class="lbl">Гарантия на работы</span></div>
+        </div>
+      </div>
+      <div class="cat-hero-visual">
+        <div class="cat-hero-photo" data-placeholder="Смонтированная котельная ТЕРРАТЕРМ">
+          <img src="../assets/img/obekty/hero-boiler.jpg" alt="Смонтированная котельная ТЕРРАТЕРМ" onerror="this.remove()">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="portfolio-section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2>Портфолио</h2>
+          <p class="section-lead">Выберите тип системы — или смотрите все объекты сразу.</p>
+        </div>
+      </div>
+
+      <div class="blog-filters" id="objFilters">
+        <button type="button" class="active" data-cat="all">Все объекты</button>
+        <button type="button" data-cat="Газовые котельные">Газовые котельные</button>
+        <button type="button" data-cat="Тепловые насосы">Тепловые насосы</button>
+        <button type="button" data-cat="Комбинированные">Комбинированные</button>
+      </div>
+
+      <div class="blog-grid" id="objGrid"></div>
+    </div>
+  </section>
+
+  
+  <div class="cta-block">
+    <h2>Хотите такой же объект?</h2>
+    <p>Пришлите план дома — бесплатно рассчитаем теплопотери, подберём оборудование и составим смету со скидкой до 15% от РРЦ.</p>
+    <a href="../kalkulyatory/index.html" class="btn">Получить расчёт →</a>
+  </div>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="../assets/js/include.js"></script>
+  <script src="../assets/js/objects-data.js"></script>
+  <script>
+    const grid = document.getElementById('objGrid');
+    const filters = document.getElementById('objFilters');
+
+    function renderObjects(cat = 'all') {
+  if (!window.OBJECTS_LIST) {
+    grid.innerHTML = '<p style="color:#d9381e; font-weight:600;">Не найден файл objects-data.js.</p>';
+    return;
+  }
+
+  const items = window.OBJECTS_LIST.filter(o => cat === 'all' || o.category === cat);
+  grid.innerHTML = items.map(o => `
+    <a href="case.html?slug=${o.slug}" class="blog-card">
+      <div class="blog-photo" data-placeholder="Фото: ${o.title}">
+        <span class="blog-cat">${o.category}</span>
+        <span class="blog-date">${o.badge}</span>
+        <img src="${o.image}" alt="${o.title}" loading="lazy" onerror="this.remove()">
+      </div>
+      <div class="blog-body">
+        <div class="case-loc" style="margin-bottom:8px;">${o.location}</div>
+        <h3>${o.title}</h3>
+        <p>${o.excerpt}</p>
+        
+        
+        <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:10px; padding:14px 0; margin:14px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); font-size:13px;">
+          ${o.metrics.map(m => `
+            <div>
+              <span style="display:block; font-weight:800; font-size:15px; color:var(--ink);">${m.val}</span>
+              <span style="display:block; font-size:12px; color:var(--muted);">${m.lbl}</span>
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="blog-meta">
+          <span class="case-link">Разбор решения</span>
+          <div class="blog-arrow">→</div>
+        </div>
+      </div>
+    </a>
+  `).join('');
+}
+
+
+    filters.addEventListener('click', e => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      filters.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderObjects(btn.dataset.cat);
+    });
+
+    renderObjects();
+  </script>
+</body>
+</html>

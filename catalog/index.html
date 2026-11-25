@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Каталог отопительного оборудования — ТЕРРАТЕРМ</title>
+<meta name="description" content="Инженерное оборудование для отопления: котлы, радиаторы, тёплый пол, насосы, автоматика.">
+<link href="../assets/css/style.css" rel="stylesheet"/>
+</head>
+<body>
+
+  <div id="topbar-placeholder"></div>
+
+  <div id="header-placeholder"></div>
+
+<div class="container breadcrumbs">
+  <a href="/">Главная</a><span>/</span>Каталог
+</div>
+
+
+<section class="cat-hero">
+  <div class="container cat-hero-grid">
+    <div>
+      <h1>Инженерное оборудование <span class="accent">для отопления</span></h1>
+      <p class="cat-lead">Подбираем под проект: от котла до автоматики. Всё в наличии на складе в Москве — доставка 1–2 дня. Скидка от РРЦ до 15%.</p>
+      <div class="cat-hero-stats">
+        <div><div class="num">500<span class="plus">+</span></div><div class="lbl">позиций в наличии</div></div>
+        <div><div class="num">15<span class="plus">+</span></div><div class="lbl">брендов</div></div>
+        <div><div class="num">1–2 дня</div><div class="lbl">доставка</div></div>
+      </div>
+    </div>
+    <div class="cat-hero-visual">
+      <div class="cat-hero-photo" data-placeholder="Фото: склад оборудования · 600×400">
+        <img src="/assets/img/catalog/hero-warehouse.jpg" alt="Склад ТЕРРАТЕРМ" loading="lazy" onerror="this.remove()">
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="categories">
+  <div class="container">
+    <div class="cat-grid" id="catGrid"></div>
+  </div>
+</section>
+
+
+<section class="products">
+  <div class="container">
+    <div class="section-head"><h2>Подберите оборудование</h2></div>
+
+    <div class="filters">
+      <div class="filters-row">
+        <div class="filter-field">
+          <label>Поиск</label>
+          <input type="text" class="filter-input" id="searchInput" placeholder="Название, бренд, модель...">
+        </div>
+        <div class="filter-field">
+          <label>Производитель</label>
+          <select class="filter-select" id="brandSelect"></select>
+        </div>
+        <div class="filter-field">
+          <label>Мощность</label>
+          <select class="filter-select" id="powerSelect"></select>
+        </div>
+        <button class="filter-reset" id="resetBtn">Сбросить</button>
+      </div>
+    </div>
+
+    <div class="results-info" style="margin-bottom:20px;font-size:14px;color:var(--muted)">
+      Найдено товаров: <strong id="resultsCount">0</strong>
+    </div>
+
+    <div class="product-grid" id="productGrid"></div>
+
+    <div id="noResults" style="display:none;text-align:center;padding:60px 20px;color:var(--muted);font-size:15px;background:var(--white);border-radius:14px;border:1px dashed var(--line);margin-top:20px">
+      По вашему запросу ничего не найдено. Измените параметры поиска.
+    </div>
+  </div>
+</section>
+
+
+<div id="footer-placeholder"></div>
+<script src="../assets/js/include.js"></script>
+<script src="../assets/js/data.js"></script>
+<script src="../assets/js/app.js"></script>
+<script>initCatalogPage();</script>
+</body>
+</html>

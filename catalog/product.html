@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Товар — ТЕРРАТЕРМ</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <div id="topbar-placeholder"></div>
+
+  <div id="header-placeholder"></div>
+
+  <div class="container">
+    <nav class="breadcrumbs" aria-label="Хлебные крошки">
+      <a href="../index.html">Главная</a>
+      <span>/</span>
+      <a href="../catalog/index.html">Каталог</a>
+      <span>/</span>
+      <span id="breadcrumbCurrent">Загрузка...</span>
+    </nav>
+  </div>
+
+  <main class="product-page">
+    <div class="container">
+      <div class="product-top">
+        
+        <div class="product-gallery">
+          <div class="gallery-main" id="galleryMain">
+            <img id="mainImage" src="" alt="">
+          </div>
+          <div class="gallery-thumbs" id="galleryThumbs"></div>
+        </div>
+
+        <div class="product-info">
+          <div>
+            <div class="product-country" id="prodCountry"></div>
+            <h1 class="product-title" id="prodTitle"></h1>
+            <div class="product-sku" id="prodSku"></div>
+          </div>
+
+          <div class="product-tabs">
+            <div class="tabs-nav">
+              <button type="button" class="tab-btn active" onclick="openTab(event, 'tabDesc')">Описание</button>
+              <button type="button" class="tab-btn" onclick="openTab(event, 'tabSpecs')">Характеристики</button>
+              <button type="button" class="tab-btn" onclick="openTab(event, 'tabDocs')">Документация</button>
+            </div>
+
+            <div class="tab-content active" id="tabDesc"></div>
+            <div class="tab-content" id="tabSpecs"></div>
+            <div class="tab-content" id="tabDocs"></div>
+          </div>
+
+          <div class="product-price-block">
+            <div class="product-price" id="prodPrice"></div>
+          </div>
+
+          <div class="product-actions">
+            <button type="button" id="prodOrderBtn" class="btn btn-primary" data-open-callback>Запросить цену и наличие →</button>
+            <a href="../kalkulyatory/index.html" class="btn btn-ghost">Заказать монтаж котельной под ключ</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="../assets/js/include.js"></script>
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/app.js"></script>
+  
+  <script>
+    initProductPage();
+  </script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Блог инженеров ТЕРРАТЕРМ — статьи, расчёты, разборы</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  
+  <div id="topbar-placeholder"></div>
+
+  
+  <div id="header-placeholder"></div>
+
+  
+  <div class="container">
+    <nav class="breadcrumbs" aria-label="Хлебные крошки">
+      <a href="../index.html">Главная</a>
+      <span>/</span>
+      <span>Блог</span>
+    </nav>
+  </div>
+
+  
+  <section class="cat-hero">
+    <div class="container cat-hero-grid">
+      <div>
+        <h1>Блог <span class="accent">инженеров</span></h1>
+        <p class="cat-lead">Технические разборы, сравнения технологий и расчёты от практикующих специалистов. Без воды — только то, что работает на реальных объектах.</p>
+      </div>
+      <div class="cat-hero-visual">
+        <div class="cat-hero-photo" data-placeholder="Инженер ТЕРРАТЕРМ">
+          <img src="../assets/img/blog/hero-blog.jpg" alt="Инженер ТЕРРАТЕРМ">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="blog-section">
+    <div class="container">
+      <div class="blog-filters" id="blogFilters">
+        <button type="button" class="active" data-cat="all">Все</button>
+        <button type="button" data-cat="Сравнения">Сравнения</button>
+        <button type="button" data-cat="Расчёты">Расчёты</button>
+        <button type="button" data-cat="Технические темы">Технические темы</button>
+      </div>
+      <div class="blog-grid" id="blogGrid"></div>
+    </div>
+  </section>
+
+  
+  <div class="cta-block">
+    <h2>Нужна консультация инженера?</h2>
+    <p>Не нашли ответ на свой вопрос? Позвоните или оставьте заявку — бесплатно проконсультируем по вашему объекту.</p>
+    <button type="button" class="btn" data-open-callback data-prefill="Хочу получить консультацию">Получить консультацию →</button>
+
+  </div>
+
+  
+  <div id="footer-placeholder"></div>
+
+  <script src="../assets/js/include.js"></script>
+  <script src="../assets/js/blog-data.js"></script>
+  <script>
+    const grid = document.getElementById('blogGrid');
+    const filters = document.getElementById('blogFilters');
+
+    
+    filters.querySelectorAll('button').forEach((b, i) => b.classList.toggle('active', i === 0));
+
+    function renderBlog(cat = 'all') {
+      const posts = (window.BLOG_POSTS || []).filter(p => cat === 'all' || p.category === cat);
+      grid.innerHTML = posts.map(p => {
+        
+        const imgSrc = p.image.startsWith('/') ? '..' + p.image : p.image;
+        return `
+          <a href="article.html?slug=${p.slug}" class="blog-card">
+            <div class="blog-photo" data-placeholder="Фото: ${p.title}">
+              <span class="blog-cat">${p.category}</span>
+              <span class="blog-date">${p.date}</span>
+              <img src="${imgSrc}" alt="${p.title}" loading="lazy">
+            </div>
+            <div class="blog-body">
+              <h3>${p.title}</h3>
+              <p>${p.excerpt}</p>
+              <div class="blog-meta">
+                <div class="blog-author">
+                  <div class="blog-author__avatar">${p.author.initials}</div>
+                  <div>
+                    <div class="blog-author__name">${p.author.name}</div>
+                    <div class="blog-author__role">${p.author.role}</div>
+                  </div>
+                </div>
+                <div class="blog-arrow">→</div>
+              </div>
+            </div>
+          </a>
+        `;
+      }).join('');
+    }
+
+    filters.addEventListener('click', e => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      filters.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderBlog(btn.dataset.cat);
+    });
+
+    renderBlog();
+  </script>
+</body>
+</html>

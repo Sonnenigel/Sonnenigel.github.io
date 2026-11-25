@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Услуга — ТЕРРАТЕРМ</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <div id="topbar-placeholder"></div>
+  <div id="header-placeholder"></div>
+
+  <div class="container">
+    <nav class="breadcrumbs" aria-label="Хлебные крошки">
+      <a href="../index.html">Главная</a>
+      <span>/</span>
+      <a href="index.html">Услуги</a>
+      <span>/</span>
+      <span id="svcBreadcrumb">Загрузка...</span>
+    </nav>
+  </div>
+
+  
+  <main class="product-page">
+    <div class="container">
+      <div class="product-top">
+        
+        
+        <div class="product-gallery">
+          <div class="gallery-main" id="svcGallery" data-placeholder="Фото выполнения работ">
+            <img id="svcImage" src="" alt="" onerror="this.remove()">
+          </div>
+        </div>
+
+        
+        <div class="product-info">
+          <div>
+            <div class="product-country" id="svcTag"></div>
+            <h1 class="product-title" id="svcTitle"></h1>
+            <div class="product-sku" id="svcTerm"></div>
+          </div>
+
+          
+          <div class="desc-text" id="svcDesc" style="margin: 16px 0;"></div>
+
+          
+          <div style="background: var(--sand); border-radius: 16px; padding: 20px 24px; margin: 16px 0;">
+            <h3 style="font-size: 16px; margin-bottom: 12px;">Что входит в стоимость:</h3>
+            <ul class="trust-list" id="svcIncludes" style="gap: 10px;"></ul>
+          </div>
+
+          
+          <div class="product-price-block">
+            <div class="product-price">
+              <span id="svcPrice"></span>
+              <small id="svcUnit" style="font-size: 15px; font-weight: 500; color: var(--muted); margin-left: 6px;"></small>
+            </div>
+          </div>
+
+          <div class="product-actions">
+            <button type="button" id="svcOrderBtn" class="btn btn-primary" data-open-callback>Заказать услугу →</button>
+            <a href="index.html" class="btn btn-ghost">← Все услуги</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="../assets/js/include.js"></script>
+  <script src="../assets/js/services-data.js"></script>
+  <script>
+    const slug = new URLSearchParams(location.search).get('slug');
+    const svc = (window.SERVICES_LIST || []).find(s => s.slug === slug) || (window.SERVICES_LIST || [])[0];
+
+
+    if (svc) {
+      document.title = svc.title + ' — ТЕРРАТЕРМ';
+      document.getElementById('svcBreadcrumb').textContent = svc.title;
+      document.getElementById('svcTag').textContent = svc.tag;
+      document.getElementById('svcTitle').textContent = svc.title;
+      document.getElementById('svcTerm').textContent = 'Срок выполнения: ' + svc.term;
+      document.getElementById('svcDesc').innerHTML = svc.description;
+      document.getElementById('svcPrice').textContent = svc.price;
+      document.getElementById('svcUnit').textContent = svc.unit;
+
+      const img = document.getElementById('svcImage');
+      img.src = svc.image;
+      img.alt = svc.title;
+
+      document.getElementById('svcIncludes').innerHTML = (svc.includes || []).map(item => `
+        <li style="align-items: center;">
+          <div class="trust-check" style="width:22px; height:22px; font-size:12px;">✓</div>
+          <div style="font-size: 14px; color: var(--ink);">${item}</div>
+        </li>
+      `).join('');
+
+      
+      document.getElementById('svcOrderBtn').dataset.prefill = 'Интересует услуга: ' + svc.title + ' (' + svc.price + ')';
+    }
+  </script>
+</body>
+</html>
