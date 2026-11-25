@@ -16,8 +16,8 @@ Disallow: /search.html
 Disallow: /product.html$
 Disallow: /category.html$
 Disallow: /blog/article.html$
-Disallow: /obekty/case.html$
-Disallow: /uslugi/service.html$
+Disallow: /cases/case.html$
+Disallow: /services/service.html$
 
 
 Host: https://terraterm.ru

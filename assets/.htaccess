@@ -16,8 +16,13 @@ ErrorDocument 404 /404.html
 ErrorDocument 500 /500.html
 
 # 2. Убираем index.html из адресной строки (301 редирект на корень или папку)
-RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /((?:[^/]+/)*)index\.html(?:\?|\ HTTP/)
-RewriteRule ^((?:[^/]+/)*)index\.html$ /%1 [R=301,L]
+RewriteCond %{THE_REQUEST} \s/+((?:[^/\s]+/)*)index\.html[\s?] [NC]
+RewriteRule ^ /%1 [R=301,L]
+
+# 2.1. Убираем .html из адресной строки для всех остальных страниц (кроме 404.html и 500.html)
+RewriteCond %{THE_REQUEST} \s/+([^?\s]+)\.html[\s?] [NC]
+RewriteCond %{REQUEST_URI} !^/(404|500)\.html$ [NC]
+RewriteRule ^ /%1/ [R=301,L]
 
 # 3. Если файл или директория реально существуют — отдаём напрямую (CSS, JS, фото, PHP)
 RewriteCond %{REQUEST_FILENAME} -f [OR]
@@ -25,9 +30,9 @@ RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
 # 4. Поддержка старых/ЧПУ-ссылок на услуги (из footer.html и sitemap.xml)
-RewriteRule ^uslugi/montazh-pod-klyuch/?$ /uslugi/montazh.html [L]
-RewriteRule ^uslugi/remont-otopleniya/?$ /uslugi/remont.html [L]
-RewriteRule ^uslugi/servisnoe-obsluzhivanie/?$ /uslugi/remont.html [L]
+RewriteRule ^services/montazh-pod-klyuch/?$ /services/montazh.html [L]
+RewriteRule ^services/remont-otopleniya/?$ /services/remont.html [L]
+RewriteRule ^services/servisnoe-obsluzhivanie/?$ /services/remont.html [L]
 
 # 5. Красивые ЧПУ для карточек товаров, статей, объектов и услуг (из sitemap.xml)
 # /catalog/p/baxi-eco-four-24f/ -> /catalog/product.html?slug=baxi-eco-four-24f
@@ -36,12 +41,12 @@ RewriteRule ^catalog/p/([^/]+)/?$ /catalog/product.html?slug=$1 [QSA,L]
 # /blog/a/gas-vs-electric-2026/ -> /blog/article.html?slug=gas-vs-electric-2026
 RewriteRule ^blog/a/([^/]+)/?$ /blog/article.html?slug=$1 [QSA,L]
 
-# /obekty/novorizhskoe-190m2/ -> /obekty/case.html?slug=novorizhskoe-190m2
-RewriteRule ^obekty/([^/]+)/?$ /obekty/case.html?slug=$1 [QSA,L]
+# /cases/novorizhskoe-190m2/ -> /cases/case.html?slug=novorizhskoe-190m2
+RewriteRule ^cases/([^/]+)/?$ /cases/case.html?slug=$1 [QSA,L]
 
-# /uslugi/proekt-rabochiy-ov/ -> /uslugi/service.html?slug=proekt-rabochiy-ov (если нет .html файла)
-RewriteCond %{DOCUMENT_ROOT}/uslugi/$1.html !-f
-RewriteRule ^uslugi/([^/]+)/?$ /uslugi/service.html?slug=$1 [QSA,L]
+# /services/proekt-rabochiy-ov/ -> /services/service.html?slug=proekt-rabochiy-ov (если нет .html файла)
+RewriteCond %{DOCUMENT_ROOT}/services/$1.html !-f
+RewriteRule ^services/([^/]+)/?$ /services/service.html?slug=$1 [QSA,L]
 
 # 6. Красивые ЧПУ для категорий и подкатегорий каталога (из footer.html и sitemap.xml)
 # /catalog/kotly/gazovye/ -> /catalog/category.html?cat=gazovye-kotly

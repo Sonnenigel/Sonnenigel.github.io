@@ -159,17 +159,25 @@ function initCallbackModal() {
   });
 
   
-  function formatPhone() {
+  function formatPhone(e) {
     let digits = phoneInput.value.replace(/\D/g, "");
+
     if (!digits) {
-      phoneInput.value = "";
-      return;
+        phoneInput.value = "";
+        return;
     }
-    if (digits === "8" || digits === "7") {
-      digits = "7" + digits.slice(1);
+
+    if (e && e.inputType === "deleteContentBackward" && digits === "7") {
+        phoneInput.value = "";
+        return;
+    }
+
+    if (digits.startsWith("7") || digits.startsWith("8")) {
+        digits = "7" + digits.slice(1);
     } else {
-      digits = "7" + digits;
+        digits = "7" + digits;
     }
+
     digits = digits.substring(0, 11);
 
     let formatted = "+7";
@@ -179,7 +187,20 @@ function initCallbackModal() {
     if (digits.length >= 10) formatted += "-" + digits.substring(9, 11);
 
     phoneInput.value = formatted;
-  }
+}
+
+phoneInput.addEventListener("input", formatPhone);
+
+phoneInput.addEventListener("focus", () => {
+    if (!phoneInput.value) phoneInput.value = "+7 (";
+});
+
+phoneInput.addEventListener("blur", () => {
+    if (phoneInput.value === "+7 (" || phoneInput.value === "+7") {
+        phoneInput.value = "";
+    }
+});
+
 
   phoneInput.addEventListener("input", formatPhone);
   phoneInput.addEventListener("focus", () => {

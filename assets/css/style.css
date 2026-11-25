@@ -39,7 +39,13 @@ body {
   -webkit-font-smoothing: antialiased;
   font-size: 15px;
   overflow-x: hidden;
+  
 }
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 img { max-width: 100%; display: block; }
 a { color: inherit; text-decoration: none; }
 button { font-family: inherit; cursor: pointer; border: none; background: none; }
@@ -50,12 +56,16 @@ input, select, textarea { font-family: inherit; }
    3. ТИПОГРАФИКА
    ============================================================ */
 h1 {
-  font-size: clamp(32px, 4.5vw, 52px);
-  line-height: 1.05;
+  font-size: clamp(26px, 6.5vw, 52px);
+  line-height: 1.08;
   font-weight: 800;
   letter-spacing: -.02em;
   margin-bottom: 18px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
 }
+
 h1 .accent { color: var(--terra); position: relative; display: inline-block; }
 h1 .accent::after {
   content: "";
@@ -1113,6 +1123,12 @@ place-items: center;
 transition: all .3s;
 flex-shrink: 0;
 }
+.blog-card,
+.project,
+.cat-card,
+.service-card {
+  min-width: 0;
+}
 /* ============================================================
 21. ФИЛЬТРЫ КАТАЛОГА И ПОИСК
 ============================================================ */
@@ -1984,3 +2000,12 @@ flex-shrink: 0; padding: 8px 16px; font-size: 13px;
     object-fit: cover;
     display: block;
   }
+  @media (max-width: 640px) {
+  .hero-grid,
+  .blog-preview-grid,
+  .blog-grid,
+  .portfolio-grid,
+  .cases-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

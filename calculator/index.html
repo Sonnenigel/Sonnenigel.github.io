@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Калькулятор отопления — расчёт теплопотерь и бюджета · ТЕРРАТЕРМ</title>
+<meta name="description" content="Инженерный калькулятор отопления: расчёт теплопотерь дома, мощности котла и предварительного бюджета системы. 4 шага, результат за 3 минуты.">
+<link rel="stylesheet" href="/assets/css/style.css">
+
+
+<script>
+window.__pdfReady = false;
+
+function loadPdfFallback() {
+  if (window.__pdfFallbackLoading) return;
+
+  window.__pdfFallbackLoading = true;
+
+  const script = document.createElement('script');
+
+  script.src = 'https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.2/dist/html2pdf.bundle.min.js';
+
+  script.onload = () => {
+    window.__pdfReady = typeof window.html2pdf === 'function';
+    window.__pdfFallbackLoading = false;
+  };
+
+  script.onerror = () => {
+    window.__pdfFallbackLoading = false;
+    console.error('Не удалось загрузить html2pdf.js');
+  };
+
+  document.head.appendChild(script);
+}
+</script>
+
+<script
+  src="https://unpkg.com/html2pdf.js@0.10.2/dist/html2pdf.bundle.min.js"
+  onload="window.__pdfReady = typeof window.html2pdf === 'function'"
+  onerror="loadPdfFallback()">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+
+  <div id="topbar-placeholder"></div>
+  <div id="header-placeholder"></div>
+
+
+<div class="container breadcrumbs">
+  <a href="/">Главная</a><span>/</span>Калькулятор отопления
+</div>
+
+
+<section class="cat-hero">
+  <div class="container cat-hero-grid">
+    <div>
+      <h1>Калькулятор <span class="accent">отопления</span></h1>
+      <p class="cat-lead">Единый инженерный квиз: теплопотери дома, мощность оборудования и предварительный бюджет системы за 4 шага. Расчёт по методике СП 50.13330 и ценам нашего склада.</p>
+      <div class="cat-hero-stats">
+        <div><span class="num">4</span><span class="lbl">Шага расчёта</span></div>
+        <div><span class="num">3–5 <span class="plus">мин</span></span><span class="lbl">На заполнение</span></div>
+        <div><span class="num">2</span><span class="lbl">Результата: кВт и ₽</span></div>
+      </div>
+    </div>
+    <div class="cat-hero-visual">
+      <div class="cat-hero-photo" data-placeholder="Инженерный расчет ТЕРРАТЕРМ">
+        <img src="/assets/img/calculator/hero-calc.jpg" alt="Калькулятор системы отопления" onerror="this.remove()">
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="quiz-section" id="quiz">
+  <div class="container">
+    <div class="quiz-card">
+
+      <div class="quiz-header">
+        <div class="quiz-step-label" id="step-label">Шаг 1 из 4</div>
+        <div class="quiz-progress">
+          <span class="is-active" data-step="1"></span>
+          <span data-step="2"></span>
+          <span data-step="3"></span>
+          <span data-step="4"></span>
+        </div>
+      </div>
+
+      
+      <div class="quiz-step active" data-step="1">
+        <h2>1. Параметры дома</h2>
+        <p class="step-intro">Укажите основные характеристики — этого достаточно для предварительной оценки.</p>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label" for="area">Отапливаемая площадь, м²</label>
+            <input type="number" id="area" value="150" min="30" max="2000" step="10">
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="floors">Количество этажей</label>
+            <select id="floors">
+              <option value="1">1 этаж</option>
+              <option value="2" selected>2 этажа</option>
+              <option value="3">3 этажа</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label" for="height">Средняя высота этажа, м</label>
+            <input type="number" id="height" value="2.8" min="2.2" max="4.5" step="0.1">
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="region">Город / населённый пункт</label>
+            <select id="region">
+              <option value="-28" selected>Москва и ближ МО (−28°C)</option>
+              <option value="-26">Юг МО: Подольск, Чехов (−26°C)</option>
+              <option value="-30">Север МО: Дмитров, Талдом (−30°C)</option>
+              <option value="-29">Восток МО: Коломна, Орехово (−29°C)</option>
+              <option value="-31">Запад МО: Волоколамск (−31°C)</option>
+            </select>
+            <div class="field-hint">Если не знаете — оставьте по умолчанию. Инженер уточнит при проверке.</div>
+          </div>
+        </div>
+        <div class="quiz-nav">
+          <button class="btn btn-primary" data-action="next">Далее →</button>
+        </div>
+      </div>
+
+      
+      <div class="quiz-step" data-step="2">
+        <h2>2. Конструкции дома</h2>
+        <p class="step-intro">Выберите, из чего сделаны основные ограждающие конструкции. От этого зависят теплопотери.</p>
+        <div class="field-group">
+          <div class="field-label">Наружные стены</div>
+          <div class="options">
+            <label class="option"><input type="radio" name="walls" value="0.22" checked><span class="option__mark"></span>Газобетон / блок с утеплением</label>
+            <label class="option"><input type="radio" name="walls" value="0.28"><span class="option__mark"></span>Кирпич с утеплением</label>
+            <label class="option"><input type="radio" name="walls" value="0.18"><span class="option__mark"></span>Утеплённый каркас</label>
+            <label class="option"><input type="radio" name="walls" value="1.2"><span class="option__mark"></span>Без достаточного утепления</label>
+          </div>
+        </div>
+        <div class="field-group">
+          <div class="field-label">Кровля / чердачное перекрытие</div>
+          <div class="options">
+            <label class="option"><input type="radio" name="roof" value="0.20" checked><span class="option__mark"></span>Утепление около 200 мм</label>
+            <label class="option"><input type="radio" name="roof" value="0.28"><span class="option__mark"></span>Утепление около 150 мм</label>
+            <label class="option"><input type="radio" name="roof" value="0.6"><span class="option__mark"></span>Слабое утепление</label>
+            <label class="option"><input type="radio" name="roof" value="1.5"><span class="option__mark"></span>Без утепления</label>
+          </div>
+        </div>
+        <div class="field-group">
+          <div class="field-label">Пол / нижнее перекрытие</div>
+          <div class="options">
+            <label class="option"><input type="radio" name="floor" value="0.22" checked><span class="option__mark"></span>Утеплённая плита / пол</label>
+            <label class="option"><input type="radio" name="floor" value="0.4"><span class="option__mark"></span>Плита с базовым утеплением</label>
+            <label class="option"><input type="radio" name="floor" value="0.8"><span class="option__mark"></span>Слабое утепление</label>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <div class="field-label">Окна</div>
+            <div class="options">
+              <label class="option"><input type="radio" name="windows" value="1.0" checked><span class="option__mark"></span>Энергоэффективные стеклопакеты</label>
+              <label class="option"><input type="radio" name="windows" value="1.8"><span class="option__mark"></span>Стандартные стеклопакеты</label>
+              <label class="option"><input type="radio" name="windows" value="3.0"><span class="option__mark"></span>Старые окна / повышенные потери</label>
+            </div>
+          </div>
+          <div class="field-group">
+            <div class="field-label">Доля остекления от площади стен</div>
+            <div class="options">
+              <label class="option"><input type="radio" name="glazing" value="0.15" checked><span class="option__mark"></span>Небольшая — около 15%</label>
+              <label class="option"><input type="radio" name="glazing" value="0.22"><span class="option__mark"></span>Средняя — около 22%</label>
+              <label class="option"><input type="radio" name="glazing" value="0.32"><span class="option__mark"></span>Большая — около 32%</label>
+            </div>
+          </div>
+        </div>
+        <div class="quiz-nav">
+          <button class="btn btn-ghost" data-action="prev">← Назад</button>
+          <button class="btn btn-primary" data-action="next">Далее →</button>
+        </div>
+      </div>
+
+      
+      <div class="quiz-step" data-step="3">
+        <h2>3. Система отопления</h2>
+        <p class="step-intro">Выбор влияет на бюджет: разное оборудование, материалы и работы.</p>
+        <div class="field-group">
+          <div class="field-label">Тип отопительных приборов</div>
+          <div class="options cols-2">
+            <label class="option"><input type="radio" name="emitters" value="radiators" checked><span class="option__mark"></span>Радиаторы</label>
+            <label class="option"><input type="radio" name="emitters" value="floor"><span class="option__mark"></span>Водяной тёплый пол</label>
+            <label class="option"><input type="radio" name="emitters" value="combined"><span class="option__mark"></span>Комбинированная</label>
+          </div>
+        </div>
+        <div class="field-group">
+          <div class="field-label">Источник тепла</div>
+          <div class="options">
+            <label class="option"><input type="radio" name="heat" value="gas" checked><span class="option__mark"></span>Газовый котёл</label>
+            <label class="option"><input type="radio" name="heat" value="electric"><span class="option__mark"></span>Электрический котёл</label>
+            <label class="option"><input type="radio" name="heat" value="solid"><span class="option__mark"></span>Твердотопливный котёл</label>
+            <label class="option"><input type="radio" name="heat" value="heatpump"><span class="option__mark"></span>Тепловой насос</label>
+            <label class="option"><input type="radio" name="heat" value="unknown"><span class="option__mark"></span>Пока не определились</label>
+          </div>
+        </div>
+        <div class="field-group">
+          <div class="field-label">Нужно горячее водоснабжение?</div>
+          <div class="options cols-2">
+            <label class="option"><input type="radio" name="dhw" value="yes" checked><span class="option__mark"></span>Да</label>
+            <label class="option"><input type="radio" name="dhw" value="no"><span class="option__mark"></span>Нет</label>
+          </div>
+          <div class="field-hint">ГВС добавляет ~1.5 кВт к мощности и бойлер косвенного нагрева.</div>
+        </div>
+        <div class="quiz-nav">
+          <button class="btn btn-ghost" data-action="prev">← Назад</button>
+          <button class="btn btn-primary" data-action="calc">Рассчитать →</button>
+        </div>
+      </div>
+
+      
+      <div class="quiz-step" data-step="4">
+        <h2>4. Предварительный результат</h2>
+        <p class="step-intro">Ориентировочные цифры. Точный расчёт — после выезда инженера и замера.</p>
+
+        <div class="result-hero">
+          <h2>Итоги расчёта</h2>
+          <div class="result-metrics">
+            <div class="result-metric"><div class="lbl">Теплопотери</div><div class="val" id="res-loss">—<small>кВт</small></div></div>
+            <div class="result-metric"><div class="lbl">Мощность с резервом</div><div class="val" id="res-power">—<small>кВт</small></div></div>
+            <div class="result-metric"><div class="lbl">Бюджет системы</div><div class="val" id="res-budget">—<small>₽</small></div></div>
+          </div>
+        </div>
+
+        <div class="result-details">
+          <h3>Детализация теплопотерь</h3>
+          <div class="detail-row"><span class="lbl">Наружные стены</span><span class="val" id="det-walls">—</span></div>
+          <div class="detail-row"><span class="lbl">Окна</span><span class="val" id="det-windows">—</span></div>
+          <div class="detail-row"><span class="lbl">Кровля</span><span class="val" id="det-roof">—</span></div>
+          <div class="detail-row"><span class="lbl">Пол</span><span class="val" id="det-floor">—</span></div>
+          <div class="detail-row"><span class="lbl">Вентиляция и воздухообмен</span><span class="val" id="det-vent">—</span></div>
+        </div>
+
+        <div class="result-details">
+          <h3>Детализация бюджета</h3>
+          <div class="detail-row"><span class="lbl">Оборудование (котёл, приборы, автоматика)</span><span class="val" id="det-equip">—</span></div>
+          <div class="detail-row"><span class="lbl">Материалы и распределение</span><span class="val" id="det-mat">—</span></div>
+          <div class="detail-row"><span class="lbl">Монтаж и пусконаладка</span><span class="val" id="det-mount">—</span></div>
+          <div class="detail-row total"><span class="lbl">ИТОГО</span><span class="val" id="det-total">—</span></div>
+        </div>
+
+        <div class="result-note">
+          <strong>Важно:</strong> расчёт предварительный. Стоимостные ставки ориентировочные и должны быть подтверждены компанией. Это не коммерческое предложение и не проектный расчёт по помещениям.
+        </div>
+
+        <div class="result-actions">
+          <button class="btn btn-ghost" data-action="reset">← Изменить параметры</button>
+          <button class="btn btn-ghost" data-action="pdf">Скачать PDF-расчёт ↓</button>
+          <button class="btn btn-primary" data-action="send">Отправить инженеру →</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<div id="pdf-template" style="position:fixed; left:-9999px; top:0; width:794px; background:#fff; font-family:'Inter',sans-serif; color:#1F1B18; padding:0; height:1122px; display:flex; flex-direction:column; box-sizing:border-box;">
+  <div style="background:linear-gradient(135deg,#C65D3A,#A84A2B); color:#fff; padding:20px 40px;">
+    <div style="font-size:28px; font-weight:800; letter-spacing:.5px;">ТЕРРАТЕРМ</div>
+    <div style="margin-top:12px; font-size:20px; font-weight:700;">Предварительный расчёт отопления</div>
+  </div>
+
+  <div style="padding:18px 40px 12px; flex:1;">
+    <div style="font-size:11px; color:#7A6F66; margin-bottom:24px;">
+      Дата: <span id="pdf-date"></span> · Методика: СП 50.13330.2012
+    </div>
+
+    <div style="background:#F5EBD9; padding:14px 18px; border-radius:8px; margin-bottom:20px;">
+      <div style="font-size:13px; font-weight:700; color:#2C2825; margin-bottom:10px; text-transform:uppercase; letter-spacing:.5px;">Параметры дома</div>
+      <div id="pdf-params" style="font-size:13px; color:#2C2825; line-height:1.8;"></div>
+    </div>
+
+    <div style="background:#FAF6F0; padding:18px; border-radius:8px; margin-bottom:20px; border-left:4px solid #C65D3A;">
+      <div style="font-size:13px; font-weight:700; color:#2C2825; margin-bottom:12px; text-transform:uppercase; letter-spacing:.5px;">Результаты расчёта</div>
+      <table style="width:100%; border-collapse:collapse;">
+        <tr><td style="padding:6px 0; color:#7A6F66;">Расчётные теплопотери</td><td style="padding:6px 0; text-align:right; font-weight:700; color:#C65D3A;" id="pdf-loss"></td></tr>
+        <tr><td style="padding:6px 0; color:#7A6F66;">Рекомендуемая мощность</td><td style="padding:6px 0; text-align:right; font-weight:700; color:#C65D3A;" id="pdf-power"></td></tr>
+        <tr style="border-top:2px solid #E8DFD3;"><td style="padding:10px 0; font-weight:700;">Предварительный бюджет</td><td style="padding:10px 0; text-align:right; font-weight:800; color:#C65D3A; font-size:18px;" id="pdf-budget"></td></tr>
+      </table>
+    </div>
+
+    <div style="font-size:13px; font-weight:700; color:#2C2825; margin-bottom:10px; text-transform:uppercase; letter-spacing:.5px;">Детализация теплопотерь</div>
+    <table style="width:100%; border-collapse:collapse; margin-bottom:20px; font-size:13px;">
+      <tr><td style="padding:6px 0; color:#7A6F66; border-bottom:1px dashed #E8DFD3;">Наружные стены</td><td style="padding:6px 0; text-align:right; border-bottom:1px dashed #E8DFD3;" id="pdf-walls"></td></tr>
+      <tr><td style="padding:6px 0; color:#7A6F66; border-bottom:1px dashed #E8DFD3;">Окна</td><td style="padding:6px 0; text-align:right; border-bottom:1px dashed #E8DFD3;" id="pdf-windows"></td></tr>
+      <tr><td style="padding:6px 0; color:#7A6F66; border-bottom:1px dashed #E8DFD3;">Кровля</td><td style="padding:6px 0; text-align:right; border-bottom:1px dashed #E8DFD3;" id="pdf-roof"></td></tr>
+      <tr><td style="padding:6px 0; color:#7A6F66; border-bottom:1px dashed #E8DFD3;">Пол</td><td style="padding:6px 0; text-align:right; border-bottom:1px dashed #E8DFD3;" id="pdf-floor"></td></tr>
+      <tr><td style="padding:6px 0; color:#7A6F66;">Вентиляция и воздухообмен</td><td style="padding:6px 0; text-align:right;" id="pdf-vent"></td></tr>
+    </table>
+
+    <div style="font-size:13px; font-weight:700; color:#2C2825; margin-bottom:10px; text-transform:uppercase; letter-spacing:.5px;">Детализация бюджета</div>
+    <table style="width:100%; border-collapse:collapse; margin-bottom:24px; font-size:13px;">
+      <tr><td style="padding:6px 0; color:#7A6F66; border-bottom:1px dashed #E8DFD3;">Оборудование</td><td style="padding:6px 0; text-align:right; border-bottom:1px dashed #E8DFD3;" id="pdf-equip"></td></tr>
+      <tr><td style="padding:6px 0; color:#7A6F66; border-bottom:1px dashed #E8DFD3;">Материалы и распределение</td><td style="padding:6px 0; text-align:right; border-bottom:1px dashed #E8DFD3;" id="pdf-mat"></td></tr>
+      <tr><td style="padding:6px 0; color:#7A6F66;">Монтаж и пусконаладка</td><td style="padding:6px 0; text-align:right;" id="pdf-mount"></td></tr>
+    </table>
+
+    <div style="background:#FAF6F0; padding:14px 18px; border-radius:8px; font-size:11px; color:#7A6F66; line-height:1.6; margin-bottom:8px;">
+      Расчёт предварительный. Стоимостные ставки ориентировочные и должны быть подтверждены компанией. Не является коммерческим предложением и проектным расчётом по помещениям. Для точного расчёта необходим выезд инженера и замер объекта.
+    </div>
+  </div>
+
+<div style="background:#1F1B18; color:#F5EBD9; padding:16px 24px; font-size:11px; line-height:1; box-sizing:border-box; display:flex; align-items:center; justify-content:space-between; gap:12px; white-space:nowrap; margin-top:auto; flex-shrink:0;">
+    <span style="font-weight:700; position:relative; top:-1.5px;">ТЕРРАТЕРМ</span>
+    <span style="position:relative; top:-1.5px;">Многолетний опыт для самых нестандартных задач</span>
+    <span style="position:relative; top:-1.5px;">+7 (495) 363-52-96</span>
+    <span style="position:relative; top:-1.5px;">info@terraterm.ru</span>
+    <span style="position:relative; top:-1.5px;">terraterm.ru</span>
+</div>
+</div>
+
+
+<section style="padding:0">
+  <div class="cta-block">
+    <h2>Нужен точный расчёт под ваш дом?</h2>
+    <p>Пришлите план — бесплатно посчитаем теплопотери по помещениям, подберём оборудование и составим смету со скидкой до 15% от РРЦ.</p>
+    <button type="button" class="btn" data-open-callback data-prefill="Хочу отправить план дома для расчёта">Отправить заявку →</button>
+
+  </div>
+</section>
+
+  <div id="footer-placeholder"></div>
+
+<script src="/assets/js/include.js" defer></script>
+
+
+<script>
+/* ============================================================
+   ИНЖЕНЕРНЫЙ РАСЧЁТ + PDF через html2pdf.js + ОТПРАВКА
+   ============================================================ */
+
+const state = { step: 1 };
+let lastCalcResult = null;
+
+
+function goToStep(n){
+  document.querySelectorAll('.quiz-step').forEach(s => s.classList.remove('active'));
+  document.querySelector(`.quiz-step[data-step="${n}"]`).classList.add('active');
+  document.querySelectorAll('.quiz-progress span').forEach(s => {
+    s.classList.toggle('is-active', parseInt(s.dataset.step) <= n);
+  });
+  document.getElementById('step-label').textContent = `Шаг ${n} из 4`;
+  state.step = n;
+  document.querySelector('.quiz-card').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+
+function collectData(){
+  const v = id => document.getElementById(id).value;
+  const r = name => document.querySelector(`input[name="${name}"]:checked`)?.value;
+  return {
+    area:    parseFloat(v('area'))   || 150,
+    floors:  parseInt(v('floors'))   || 2,
+    height:  parseFloat(v('height')) || 2.8,
+    tOut:    parseFloat(v('region')) || -28,
+    kWall:   parseFloat(r('walls'))   || 0.22,
+    kRoof:   parseFloat(r('roof'))    || 0.20,
+    kFloor:  parseFloat(r('floor'))   || 0.22,
+    kWin:    parseFloat(r('windows')) || 1.8,
+    glazing: parseFloat(r('glazing')) || 0.22,
+    emitters: r('emitters') || 'radiators',
+    heat:    r('heat')    || 'gas',
+    dhw:     r('dhw')     || 'yes'
+  };
+}
+
+
+function geometry(d){
+  const areaPerFloor = d.area / d.floors;
+  const side = Math.sqrt(areaPerFloor);
+  const perimeter = 4 * side;
+  const wallGross = perimeter * d.height * d.floors;
+  const wallNet   = wallGross * (1 - d.glazing);
+  const winArea   = wallGross * d.glazing;
+  const floorArea = areaPerFloor;
+  const roofArea  = areaPerFloor * 1.15;
+  const volume    = d.area * d.height;
+  return { wallGross, wallNet, winArea, floorArea, roofArea, volume };
+}
+
+
+function heatLoss(d){
+  const g = geometry(d);
+  const dt = 20 - d.tOut;
+  const qWall  = g.wallNet  * d.kWall  * dt;
+  const qWin   = g.winArea  * d.kWin   * dt;
+  const qRoof  = g.roofArea * d.kRoof  * dt;
+  const qFloor = g.floorArea* d.kFloor * dt;
+  const qVent  = 0.5 * g.volume * 1.2 * 1.005 * dt / 3.6;
+  const qInfil = d.kWin >= 2.5 ? qWin * 0.10 : 0;
+  const total  = qWall + qWin + qRoof + qFloor + qVent + qInfil;
+  return {
+    total: total / 1000,
+    wall:  qWall  / 1000,
+    win:   qWin   / 1000,
+    roof:  qRoof  / 1000,
+    floor: qFloor / 1000,
+    vent:  qVent  / 1000
+  };
+}
+
+
+function recommendedPower(loss, d){
+  let p = loss * 1.20;
+  if (d.dhw === 'yes') p += 1.5;
+  const series = [6,9,12,14,18,24,28,32,35,40,45,50,60,70,80,100];
+  for (const s of series) if (s >= p) return s;
+  return Math.ceil(p / 10) * 10;
+}
+
+
+function equipmentCost(d, power){
+  let cost = 0;
+  const boilers = {
+    gas:      { base: 120000, perKw: 3500 },
+    electric: { base: 55000,  perKw: 2800 },
+    solid:    { base: 75000,  perKw: 3200 },
+    heatpump: { base: 420000, perKw: 18000 },
+    unknown:  { base: 140000, perKw: 4000 }
+  };
+  const b = boilers[d.heat];
+  cost += b.base + b.perKw * power;
+  if (d.emitters === 'radiators') cost += power * 1.15 * 2500;
+  else if (d.emitters === 'floor') cost += d.area * 1200;
+  else cost += d.area * 0.5 * 1200 + power * 0.6 * 2500;
+  cost += 35000;
+  if (d.dhw === 'yes') cost += 42000;
+  cost += 28000;
+  return Math.round(cost / 1000) * 1000;
+}
+function materialsCost(d){ return Math.round((d.area * 800 + 25000) / 1000) * 1000; }
+function mountCost(d, power){
+  let cost = 0;
+  const mountBoiler = { gas: 85000, electric: 45000, solid: 65000, heatpump: 120000, unknown: 75000 };
+  cost += mountBoiler[d.heat];
+  if (d.emitters === 'radiators') cost += power * 1.15 * 1200;
+  else if (d.emitters === 'floor') cost += d.area * 650;
+  else cost += d.area * 0.5 * 650 + power * 0.6 * 1200;
+  cost += 18000;
+  return Math.round(cost / 1000) * 1000;
+}
+
+
+const fmtRub = n => n.toLocaleString('ru-RU') + ' ₽';
+const fmtKw  = n => n.toFixed(1).replace('.0','') + ' кВт';
+
+
+function calculate(){
+  const d = collectData();
+  const loss = heatLoss(d);
+  const power = recommendedPower(loss.total, d);
+  const equip = equipmentCost(d, power);
+  const mat   = materialsCost(d);
+  const mount = mountCost(d, power);
+  const total = equip + mat + mount;
+
+  document.getElementById('res-loss').textContent   = fmtKw(loss.total);
+  document.getElementById('res-power').textContent  = fmtKw(power);
+  document.getElementById('res-budget').textContent = fmtRub(total);
+  document.getElementById('det-walls').textContent   = fmtKw(loss.wall);
+  document.getElementById('det-windows').textContent = fmtKw(loss.win);
+  document.getElementById('det-roof').textContent    = fmtKw(loss.roof);
+  document.getElementById('det-floor').textContent   = fmtKw(loss.floor);
+  document.getElementById('det-vent').textContent    = fmtKw(loss.vent);
+  document.getElementById('det-equip').textContent  = fmtRub(equip);
+  document.getElementById('det-mat').textContent    = fmtRub(mat);
+  document.getElementById('det-mount').textContent  = fmtRub(mount);
+  document.getElementById('det-total').textContent  = fmtRub(total);
+
+  lastCalcResult = { input: d, loss, power, equip, mat, mount, total };
+}
+
+/* ============================================================
+   ГЕНЕРАЦИЯ PDF через html2pdf.js
+   Рендерит HTML-шаблон (#pdf-template) в PDF — кириллица работает нативно
+   ============================================================ */
+function fillPdfTemplate(){
+  if (!lastCalcResult) return;
+  const r = lastCalcResult;
+  const d = r.input;
+
+  const heatLabels = { gas:'Газовый котёл', electric:'Электрический', solid:'Твердотопливный', heatpump:'Тепловой насос', unknown:'Не определён' };
+  const emitterLabels = { radiators:'Радиаторы', floor:'Тёплый пол', combined:'Комбинированная' };
+
+  document.getElementById('pdf-date').textContent = new Date().toLocaleDateString('ru-RU');
+  document.getElementById('pdf-params').innerHTML =
+    `Площадь: <b>${d.area} м²</b><br>` +
+    `Этажей: <b>${d.floors}</b> · Высота: <b>${d.height} м</b><br>` +
+    `Расчётная t°: <b>${d.tOut} °C</b><br>` +
+    `Приборы: <b>${emitterLabels[d.emitters]}</b><br>` +
+    `Источник тепла: <b>${heatLabels[d.heat]}</b><br>` +
+    `ГВС: <b>${d.dhw === 'yes' ? 'Да' : 'Нет'}</b>`;
+
+  document.getElementById('pdf-loss').textContent   = fmtKw(r.loss.total);
+  document.getElementById('pdf-power').textContent  = fmtKw(r.power);
+  document.getElementById('pdf-budget').textContent = fmtRub(r.total);
+  document.getElementById('pdf-walls').textContent  = fmtKw(r.loss.wall);
+  document.getElementById('pdf-windows').textContent= fmtKw(r.loss.win);
+  document.getElementById('pdf-roof').textContent   = fmtKw(r.loss.roof);
+  document.getElementById('pdf-floor').textContent  = fmtKw(r.loss.floor);
+  document.getElementById('pdf-vent').textContent   = fmtKw(r.loss.vent);
+  document.getElementById('pdf-equip').textContent  = fmtRub(r.equip);
+  document.getElementById('pdf-mat').textContent    = fmtRub(r.mat);
+  document.getElementById('pdf-mount').textContent  = fmtRub(r.mount);
+}
+
+
+async function generatePDF() {
+    if (!lastCalcResult) {
+        alert('Сначала выполните расчёт.');
+        throw new Error('Расчёт отсутствует');
+    }
+
+    if (typeof html2canvas !== 'function') {
+        throw new Error('Библиотека html2canvas не загружена');
+    }
+
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+        throw new Error('Библиотека jsPDF не загружена');
+    }
+
+    fillPdfTemplate();
+
+    const element = document.getElementById('pdf-template');
+
+    if (!element) {
+        throw new Error('Шаблон PDF не найден');
+    }
+
+    const originalStyle = element.getAttribute('style');
+
+    try {
+        // Временно размещаем шаблон в видимой области
+        element.style.position = 'absolute';
+        element.style.left = '0';
+        element.style.top = '0';
+        element.style.width = '794px';
+        element.style.height = '1122px';
+        element.style.display = 'block';
+        element.style.visibility = 'visible';
+        element.style.opacity = '1';
+        element.style.zIndex = '-1';
+        element.style.overflow = 'visible';
+
+        await document.fonts.ready;
+
+        // Даём браузеру применить стили
+        await new Promise(resolve => requestAnimationFrame(
+            () => requestAnimationFrame(resolve)
+        ));
+
+        const canvas = await html2canvas(element, {
+            scale: 2,
+            useCORS: true,
+            backgroundColor: '#ffffff',
+            logging: true,
+            width: 794,
+            windowWidth: 1000,
+            scrollX: 0,
+            scrollY: 0
+        });
+
+        console.log('PDF CANVAS:', {
+            width: canvas.width,
+            height: canvas.height
+        });
+
+        if (!canvas.width || !canvas.height) {
+            throw new Error('Получено пустое изображение шаблона');
+        }
+
+        const { jsPDF } = window.jspdf;
+
+        const pdf = new jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4'
+        });
+
+        const pageWidth = 210;
+        const pageHeight = 297;
+
+        // Высота одной страницы в пикселях холста
+        const pageHeightPx = Math.floor(
+            canvas.width * pageHeight / pageWidth
+        );
+
+        let position = 0;
+        let pageNumber = 0;
+
+        while (position < canvas.height) {
+            const currentHeight = Math.min(
+                pageHeightPx,
+                canvas.height - position
+            );
+
+            const pageCanvas = document.createElement('canvas');
+            pageCanvas.width = canvas.width;
+            pageCanvas.height = currentHeight;
+
+            const context = pageCanvas.getContext('2d');
+
+            context.drawImage(
+                canvas,
+                0,
+                position,
+                canvas.width,
+                currentHeight,
+                0,
+                0,
+                canvas.width,
+                currentHeight
+            );
+
+            const image = pageCanvas.toDataURL('image/jpeg', 0.95);
+
+            if (pageNumber > 0) {
+                pdf.addPage();
+            }
+
+            const imageHeight = currentHeight * pageWidth / canvas.width;
+
+            pdf.addImage(
+                image,
+                'JPEG',
+                0,
+                0,
+                pageWidth,
+                imageHeight
+            );
+
+            position += currentHeight;
+            pageNumber++;
+        }
+
+        console.log('PDF успешно сформирован. Страниц:', pageNumber);
+
+        return pdf.output('blob');
+
+    } finally {
+        // Возвращаем исходное оформление шаблона
+        if (originalStyle !== null) {
+            element.setAttribute('style', originalStyle);
+        } else {
+            element.removeAttribute('style');
+        }
+    }
+}
+/* ============================================================
+   ОБРАБОТЧИКИ КНОПОК
+   ============================================================ */
+document.querySelectorAll('[data-action]').forEach(btn => {
+  btn.addEventListener('click', async e => {
+    const action = btn.dataset.action;
+
+    if (action === 'next' && state.step < 4) goToStep(state.step + 1);
+    else if (action === 'prev' && state.step > 1) goToStep(state.step - 1);
+    else if (action === 'calc') { calculate(); goToStep(4); }
+    else if (action === 'reset') goToStep(1);
+
+    
+else if (action === 'pdf') {
+    try {
+        const pdfBlob = await generatePDF();
+
+        const url = URL.createObjectURL(pdfBlob);
+        const a = document.createElement('a');
+
+        a.href = url;
+        a.download = `rascchet-terraterm-${lastCalcResult.input.area}m2.pdf`;
+
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+        setTimeout(() => URL.revokeObjectURL(url), 10000);
+
+    } catch (e) {
+        console.error('Ошибка создания PDF:', e);
+        alert('Не удалось сформировать PDF: ' + e.message);
+    }
+}
+
+
+    else if (action === 'send') {
+      try {
+        const pdfBlob = await generatePDF();
+        const r = lastCalcResult;
+        const prefillText =
+          `Расчёт отопления для дома ${r.input.area} м². ` +
+          `Теплопотери: ${fmtKw(r.loss.total)}, мощность: ${fmtKw(r.power)}, ` +
+          `бюджет: ${fmtRub(r.total)}. Прошу подтвердить расчёт и предложить конкретное оборудование.`;
+
+        
+        const waitForModal = () => new Promise(resolve => {
+          const check = () => {
+            if (typeof window.openCallbackModalWithFile === 'function') resolve();
+            else setTimeout(check, 100);
+          };
+          check();
+        });
+        await waitForModal();
+
+        window.openCallbackModalWithFile(
+          prefillText,
+          pdfBlob,
+          `rascchet-terraterm-${r.input.area}m2.pdf`
+        );
+} catch(e) {
+
+  console.error('Ошибка подготовки PDF для отправки:', e);
+
+  alert(
+    'Не удалось подготовить PDF для отправки.\n\n' +
+    (e.message || 'Неизвестная ошибка')
+  );
+
+}
+    }
+  });
+});
+</script>
+
+</body>
+</html>
