@@ -1972,7 +1972,7 @@ flex-shrink: 0; padding: 8px 16px; font-size: 13px;
 .hero-gallery {
     position: relative;
     width: 100%;
-    max-width: 600px; /* подстройте при необходимости */
+    max-width: 600px; 
     aspect-ratio: 4 / 3;
     overflow: hidden;
     border-radius: 16px;
@@ -2007,5 +2007,454 @@ flex-shrink: 0; padding: 8px 16px; font-size: 13px;
   .portfolio-grid,
   .cases-grid {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ==========================================
+   MOBILE HEADER — TERRATERM
+   ========================================== */
+
+@media (max-width: 768px) {
+
+  
+  .topbar {
+    width: 100%;
+    height: auto;
+    box-sizing: border-box;
+  }
+
+  .topbar-inner {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 9px 15px;
+  }
+
+  .topbar-left {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 5px 14px;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .topbar-item {
+    white-space: normal;
+    font-size: 12px;
+  }
+
+  .topbar-right {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .topbar-right a {
+    display: inline-block;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    white-space: normal;
+    font-size: 12px;
+    text-align: center;
+  }
+
+
+  
+  header {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .header-inner {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 14px;
+    padding: 15px;
+    min-width: 0;
+  }
+
+
+  
+  .header-inner > .logo {
+    order: 1;
+    flex: 0 0 100%;
+    width: 100%;
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .logo-text {
+    min-width: 0;
+  }
+
+
+  
+  .header-inner > nav {
+    display: none;
+  }
+
+
+  
+  .header-contacts-wrap {
+    order: 2;
+    flex: 1 1 100%;
+    width: 100%;
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .header-search-btn {
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+  }
+
+  .header-contacts {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .header-phones {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .header-phone {
+    font-size: 14px;
+    white-space: nowrap;
+    line-height: 1.4;
+  }
+
+
+  
+  .header-actions {
+    order: 3;
+    flex: 1 1 100%;
+    width: 100%;
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .header-actions .btn {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 46px;
+    white-space: normal;
+    padding: 10px 14px;
+    text-align: center;
+  }
+
+  .burger {
+    flex: 0 0 46px;
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+}
+
+
+@media (max-width: 380px) {
+
+  .header-inner {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .logo-text {
+    font-size: 18px;
+  }
+
+  .header-phone {
+    font-size: 13px;
+  }
+
+  .header-contacts-wrap {
+    gap: 9px;
+  }
+
+  .topbar-inner {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .header-actions .btn {
+    font-size: 13px;
+    padding: 9px 10px;
+  }
+
+}
+
+/* ==========================================
+   FIX: MOBILE 320px — TERRATERM
+   ========================================== */
+
+@media screen and (max-width: 380px) {
+
+  /* Общая защита от горизонтального переполнения */
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  img,
+  video,
+  iframe {
+    max-width: 100%;
+  }
+
+  /* ==========================================
+     1. ШАПКА И НОМЕРА ТЕЛЕФОНОВ
+     ========================================== */
+
+  header,
+  .header,
+  .header-inner,
+  .header-contacts,
+  .header-contact,
+  .header-phones {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .header-contacts,
+  .header-phones {
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .header-contacts a,
+  .header-phones a,
+  .header-phone,
+  .phone-number {
+    display: inline-block;
+    max-width: 100%;
+    white-space: nowrap;
+    font-size: 12px;
+  }
+
+  .header-phones {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Не скрывать телефонные номера */
+  .header-phones,
+  .header-contacts {
+    visibility: visible;
+  }
+
+  /* ==========================================
+     2. КАРТОЧКИ СПЕЦИАЛИСТОВ
+     ========================================== */
+
+  .team,
+  .team-section,
+  .team-grid,
+  .specialists,
+  .specialists-grid,
+  .doctors,
+  .doctors-grid {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .team-grid,
+  .specialists-grid,
+  .doctors-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .team-card,
+  .specialist-card,
+  .doctor-card,
+  .team-item,
+  .specialist,
+  .doctor {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .team-card img,
+  .specialist-card img,
+  .doctor-card img,
+  .team-item img {
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  .team-card *,
+  .specialist-card *,
+  .doctor-card * {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  /* ==========================================
+     3. ДОКУМЕНТЫ
+     ========================================== */
+
+  .documents,
+  .documents-section,
+  .documents-list,
+  .docs,
+  .docs-list {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .document-card,
+  .document-item,
+  .doc-card,
+  .doc-item,
+  .document {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    gap: 8px;
+  }
+
+  .document-card *,
+  .document-item *,
+  .doc-card *,
+  .doc-item * {
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  .document-card a,
+  .document-item a,
+  .doc-card a,
+  .doc-item a {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  /* ==========================================
+     4. ОТЗЫВЫ
+     ========================================== */
+
+  .reviews,
+  .reviews-section,
+  .reviews-container,
+  .reviews-slider,
+  .review-slider {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .reviews-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .review-card,
+  .reviews-card,
+  .review-item,
+  .swiper-slide {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .review-card *,
+  .reviews-card *,
+  .review-item * {
+    max-width: 100%;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .reviews img,
+  .review-card img,
+  .review-item img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* ==========================================
+     5. ОБЩИЕ КОНТЕЙНЕРЫ
+     ========================================== */
+
+  section,
+  .container,
+  .section,
+  .content,
+  .section-inner {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .container,
+  .section-inner {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  h1,
+  h2,
+  h3,
+  p {
+    overflow-wrap: anywhere;
+  }
+
+  button,
+  a {
+    max-width: 100%;
   }
 }
